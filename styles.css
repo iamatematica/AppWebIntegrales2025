@@ -789,3 +789,52 @@ a.btn:hover, a.nav-btn:hover {
 a.btn:visited, a.nav-btn:visited {
     color: inherit;
 }
+
+/* Ranking */
+.ranking {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  border-radius: 12px;
+  text-align: left;
+}
+
+.ranking ol {
+  padding-left: 1.2rem;
+}
+
+.ranking li {
+  margin: 0.25rem 0;
+  font-weight: 600;
+}
+
+/* Badge modal */
+.badge-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1100;
+}
+
+.badge-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.badge-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
