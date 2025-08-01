@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrales Impropias - Teoría y Práctica</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(-10px, -10px) rotate(1deg); }
+            66% { transform: translate(10px, -5px) rotate(-1deg); }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #357abd 0%, #2c5f8f 100%);
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .theory-content {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            border-left: 5px solid #4a90e2;
+        }
+
+        .definition-box {
+            background: #e3f2fd;
+            border: 2px solid #1976d2;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .definition-box::before {
+            content: "DEFINICIÓN";
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #1976d2;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .theorem-box {
+            background: #f3e5f5;
+            border: 2px solid #7b1fa2;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .theorem-box::before {
+            content: "TEOREMA";
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #7b1fa2;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .example-box {
+            background: #fff3e0;
+            border: 2px solid #f57c00;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .example-box::before {
+            content: "EJEMPLO";
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #f57c00;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .note-box {
+            background: #fff8e1;
+            border: 2px solid #fbc02d;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .note-box::before {
+            content: "NOTA";
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: #fbc02d;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .classification {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .type-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 5px solid #4a90e2;
+            transition: transform 0.3s ease;
+        }
+
+        .type-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .type-title {
+            color: #2c5f8f;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .math-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .convergence-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .convergence-table th {
+            background: #4a90e2;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .convergence-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .convergence-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .convergent {
+            background: #d4edda !important;
+            color: #155724;
+        }
+
+        .divergent {
+            background: #f8d7da !important;
+            color: #721c24;
+        }
+
+        h2 {
+            color: #2c5f8f;
+            border-bottom: 3px solid #4a90e2;
+            padding-bottom: 10px;
+            margin: 30px 0 20px 0;
+        }
+
+        h3 {
+            color: #357abd;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #4a90e2;
+            margin: 20px 0 10px 0;
+        }
+
+        .step {
+            background: #f8f9ff;
+            border-left: 4px solid #4a90e2;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .result {
+            background: #e8f5e8;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 80%;
+                margin: 5px 0;
+            }
+            
+            .classification {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Integrales Impropias</h1>
+            <p class="subtitle">Teoría Completa y Aplicaciones</p>
+        </div>
+        
+        <div class="content">
+            <div class="nav-buttons">
+                <button class="nav-btn active" onclick="showSection('teoria')">Teoría</button>
+                <button class="nav-btn" onclick="showSection('ejemplos')">Ejemplos</button>
+                <button class="nav-btn" onclick="showSection('convergencia')">Convergencia</button>
+                <button class="nav-btn" onclick="showSection('practica')">Práctica</button>
+                <a href="index.html" class="nav-btn" style="text-decoration: none;">🎯 EJERCICIOS INTERACTIVOS</a>
+            </div>
+
+            <div id="teoria" class="section active">
+                <div class="theory-content">
+                    <h2>Integrales Impropias</h2>
+                    
+                    <div class="definition-box">
+                        <h3>Definición</h3>
+                        <p>Una <strong>integral impropia</strong> es una integral definida que tiene una o más de las siguientes características:</p>
+                        <ul>
+                            <li>Uno o ambos límites de integración son infinitos</li>
+                            <li>El integrando tiene una discontinuidad infinita en algún punto del intervalo de integración</li>
+                        </ul>
+                    </div>
+
+                    <h3>Clasificación de Integrales Impropias</h3>
+                    
+                    <div class="classification">
+                        <div class="type-card">
+                            <div class="type-title">Tipo I: Límites Infinitos</div>
+                            <p><strong>Caso 1:</strong> Límite superior infinito</p>
+                            <div class="math-display">
+                                $$\int_a^{\infty} f(x) \, dx = \lim_{t \to \infty} \int_a^t f(x) \, dx$$
+                            </div>
+                            
+                            <p><strong>Caso 2:</strong> Límite inferior infinito</p>
+                            <div class="math-display">
+                                $$\int_{-\infty}^b f(x) \, dx = \lim_{t \to -\infty} \int_t^b f(x) \, dx$$
+                            </div>
+                            
+                            <p><strong>Caso 3:</strong> Ambos límites infinitos</p>
+                            <div class="math-display">
+                                $$\int_{-\infty}^{\infty} f(x) \, dx = \int_{-\infty}^c f(x) \, dx + \int_c^{\infty} f(x) \, dx$$
+                            </div>
+                            <p style="text-align: center; font-style: italic; color: #666;">donde c es cualquier número real</p>
+                        </div>
+
+                        <div class="type-card">
+                            <div class="type-title">Tipo II: Discontinuidades Infinitas</div>
+                            <p><strong>Caso 1:</strong> Discontinuidad en el límite superior</p>
+                            <div class="math-display">
+                                $$\int_a^b f(x) \, dx = \lim_{t \to b^-} \int_a^t f(x) \, dx$$
+                            </div>
+                            <p style="text-align: center; font-style: italic; color: #666;">cuando $\lim_{x \to b^-} f(x) = \pm\infty$</p>
+                            
+                            <p><strong>Caso 2:</strong> Discontinuidad en el límite inferior</p>
+                            <div class="math-display">
+                                $$\int_a^b f(x) \, dx = \lim_{t \to a^+} \int_t^b f(x) \, dx$$
+                            </div>
+                            <p style="text-align: center; font-style: italic; color: #666;">cuando $\lim_{x \to a^+} f(x) = \pm\infty$</p>
+                            
+                            <p><strong>Caso 3:</strong> Discontinuidad en un punto interior</p>
+                            <div class="math-display">
+                                $$\int_a^b f(x) \, dx = \int_a^c f(x) \, dx + \int_c^b f(x) \, dx$$
+                            </div>
+                            <p style="text-align: center; font-style: italic; color: #666;">cuando $\lim_{x \to c} f(x) = \pm\infty$ y $a < c < b$</p>
+                        </div>
+                    </div>
+
+                    <div class="theorem-box">
+                        <h3>Convergencia y Divergencia</h3>
+                        <p>Una integral impropia:</p>
+                        <ul>
+                            <li><strong>Converge</strong> si el límite existe y es finito</li>
+                            <li><strong>Diverge</strong> si el límite no existe o es infinito</li>
+                        </ul>
+                        
+                        <div class="note-box">
+                            <p><strong>Importante:</strong> Para integrales del tipo $\int_{-\infty}^{\infty} f(x) \, dx$, la integral converge solo si ambas integrales $\int_{-\infty}^c f(x) \, dx$ e $\int_c^{\infty} f(x) \, dx$ convergen.</p>
+                        </div>
+                    </div>
+
+                    <h3>Criterios de Convergencia</h3>
+                    
+                    <div class="theorem-box">
+                        <h4>1. Criterio de Comparación</h4>
+                        <p>Sean $f(x)$ y $g(x)$ funciones continuas tales que $0 \leq f(x) \leq g(x)$ para $x \geq a$:</p>
+                        <ul>
+                            <li>Si $\int_a^{\infty} g(x) \, dx$ converge, entonces $\int_a^{\infty} f(x) \, dx$ converge</li>
+                            <li>Si $\int_a^{\infty} f(x) \, dx$ diverge, entonces $\int_a^{\infty} g(x) \, dx$ diverge</li>
+                        </ul>
+                    </div>
+
+                    <div class="theorem-box">
+                        <h4>2. Criterio de Comparación por Límite</h4>
+                        <p>Sean $f(x)$ y $g(x)$ funciones positivas para $x \geq a$. Si:</p>
+                        <div class="math-display">
+                            $$\lim_{x \to \infty} \frac{f(x)}{g(x)} = L$$
+                        </div>
+                        <p>donde $0 < L < \infty$, entonces ambas integrales $\int_a^{\infty} f(x) \, dx$ e $\int_a^{\infty} g(x) \, dx$ tienen el mismo comportamiento (ambas convergen o ambas divergen).</p>
+                    </div>
+
+                    <h3>Integrales de Referencia Importantes</h3>
+                    
+                    <div class="convergence-table">
+                        <thead>
+                            <tr>
+                                <th>Integral</th>
+                                <th>Condición</th>
+                                <th>Comportamiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>$\int_1^{\infty} \frac{1}{x^p} \, dx$</td>
+                                <td>$p > 1$</td>
+                                <td class="convergent">Converge</td>
+                            </tr>
+                            <tr>
+                                <td>$\int_1^{\infty} \frac{1}{x^p} \, dx$</td>
+                                <td>$p \leq 1$</td>
+                                <td class="divergent">Diverge</td>
+                            </tr>
+                            <tr>
+                                <td>$\int_0^1 \frac{1}{x^p} \, dx$</td>
+                                <td>$p < 1$</td>
+                                <td class="convergent">Converge</td>
+                            </tr>
+                            <tr>
+                                <td>$\int_0^1 \frac{1}{x^p} \, dx$</td>
+                                <td>$p \geq 1$</td>
+                                <td class="divergent">Diverge</td>
+                            </tr>
+                            <tr>
+                                <td>$\int_{-\infty}^{\infty} e^{-x^2} \, dx$</td>
+                                <td>-</td>
+                                <td class="convergent">Converge a $\sqrt{\pi}$</td>
+                            </tr>
+                        </tbody>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ejemplos" class="section">
+                <div class="theory-content">
+                    <h2>Ejemplos Resueltos</h2>
+
+                    <div class="example-box">
+                        <h3>Ejemplo 1: Integral con límite superior infinito</h3>
+                        <p><strong>Evaluar:</strong> $\int_1^{\infty} \frac{1}{x^2} \, dx$</p>
+                        
+                        <div class="step">
+                            <strong>Paso 1:</strong> Aplicar la definición
+                            $$\int_1^{\infty} \frac{1}{x^2} \, dx = \lim_{t \to \infty} \int_1^t \frac{1}{x^2} \, dx$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 2:</strong> Calcular la integral indefinida
+                            $$\int \frac{1}{x^2} \, dx = \int x^{-2} \, dx = -x^{-1} = -\frac{1}{x} + C$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 3:</strong> Evaluar la integral definida
+                            $$\int_1^t \frac{1}{x^2} \, dx = \left[-\frac{1}{x}\right]_1^t = -\frac{1}{t} - \left(-\frac{1}{1}\right) = 1 - \frac{1}{t}$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 4:</strong> Calcular el límite
+                            $$\lim_{t \to \infty} \left(1 - \frac{1}{t}\right) = 1 - 0 = 1$$
+                        </div>
+
+                        <div class="result">
+                            Por lo tanto: $\int_1^{\infty} \frac{1}{x^2} \, dx = 1$ (converge)
+                        </div>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>Ejemplo 2: Integral con discontinuidad infinita</h3>
+                        <p><strong>Evaluar:</strong> $\int_0^1 \frac{1}{\sqrt{x}} \, dx$</p>
+                        
+                        <div class="step">
+                            <strong>Paso 1:</strong> Identificar la discontinuidad
+                            <p>La función $f(x) = \frac{1}{\sqrt{x}}$ tiene una discontinuidad infinita en $x = 0$</p>
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 2:</strong> Aplicar la definición
+                            $$\int_0^1 \frac{1}{\sqrt{x}} \, dx = \lim_{t \to 0^+} \int_t^1 \frac{1}{\sqrt{x}} \, dx$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 3:</strong> Calcular la integral indefinida
+                            $$\int \frac{1}{\sqrt{x}} \, dx = \int x^{-1/2} \, dx = 2x^{1/2} = 2\sqrt{x} + C$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 4:</strong> Evaluar la integral definida
+                            $$\int_t^1 \frac{1}{\sqrt{x}} \, dx = \left[2\sqrt{x}\right]_t^1 = 2\sqrt{1} - 2\sqrt{t} = 2 - 2\sqrt{t}$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 5:</strong> Calcular el límite
+                            $$\lim_{t \to 0^+} (2 - 2\sqrt{t}) = 2 - 2(0) = 2$$
+                        </div>
+
+                        <div class="result">
+                            Por lo tanto: $\int_0^1 \frac{1}{\sqrt{x}} \, dx = 2$ (converge)
+                        </div>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>Ejemplo 3: Integral divergente</h3>
+                        <p><strong>Evaluar:</strong> $\int_1^{\infty} \frac{1}{x} \, dx$</p>
+                        
+                        <div class="step">
+                            <strong>Paso 1:</strong> Aplicar la definición
+                            $$\int_1^{\infty} \frac{1}{x} \, dx = \lim_{t \to \infty} \int_1^t \frac{1}{x} \, dx$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 2:</strong> Calcular la integral indefinida
+                            $$\int \frac{1}{x} \, dx = \ln|x| + C$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 3:</strong> Evaluar la integral definida
+                            $$\int_1^t \frac{1}{x} \, dx = [\ln|x|]_1^t = \ln|t| - \ln|1| = \ln t$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Paso 4:</strong> Calcular el límite
+                            $$\lim_{t \to \infty} \ln t = \infty$$
+                        </div>
+
+                        <div class="result">
+                            Por lo tanto: $\int_1^{\infty} \frac{1}{x} \, dx$ diverge
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="convergencia" class="section">
+                <div class="theory-content">
+                    <h2>Análisis de Convergencia</h2>
+
+                    <div class="theorem-box">
+                        <h3>Método de Comparación</h3>
+                        <p>Para determinar la convergencia de una integral impropia sin calcularla explícitamente.</p>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>Ejemplo: Uso del Criterio de Comparación</h3>
+                        <p><strong>Determinar si converge:</strong> $\int_1^{\infty} \frac{e^{-x}}{x} \, dx$</p>
+                        
+                        <div class="step">
+                            <strong>Análisis:</strong> Para $x \geq 1$, tenemos $e^{-x} \leq 1$, por lo tanto:
+                            $$\frac{e^{-x}}{x} \leq \frac{1}{x}$$
+                        </div>
+
+                        <div class="step">
+                            <strong>Pero:</strong> Sabemos que $\int_1^{\infty} \frac{1}{x} \, dx$ diverge, así que este criterio no es útil.
+                        </div>
+
+                        <div class="step">
+                            <strong>Mejor comparación:</strong> Para $x \geq 1$, $e^{-x} \leq e^{-1}$, y podemos escribir:
+                            $$\frac{e^{-x}}{x} \leq \frac{e^{-1}}{x}$$
+                            
+                            <p>Mejor aún, para $x \geq 1$: $\frac{e^{-x}}{x} \leq e^{-x}$</p>
+                        </div>
+
+                        <div class="step">
+                            <strong>Como:</strong> $\int_1^{\infty} e^{-x} \, dx = e^{-1}$ (converge)
+                        </div>
+
+                        <div class="result">
+                            Por el criterio de comparación: $\int_1^{\infty} \frac{e^{-x}}{x} \, dx$ converge
+                        </div>
+                    </div>
+
+                    <h3>Tabla de Convergencia de Integrales Tipo</h3>
+                    
+                    <div class="convergence-table">
+                        <thead>
+                            <tr>
+                                <th>Tipo de Integral</th>
+                                <th>Forma General</th>
+                                <th>Condición de Convergencia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Potencias</td>
+                                <td>$\int_1^{\infty} \frac{1}{x^p} \, dx$</td>
+                                <td class="convergent">$p > 1$</td>
+                            </tr>
+                            <tr>
+                                <td>Potencias (origen)</td>
+                                <td>$\int_0^1 \frac{1}{x^p} \, dx$</td>
+                                <td class="convergent">$p < 1$</td>
+                            </tr>
+                            <tr>
+                                <td>Exponencial</td>
+                                <td>$\int_0^{\infty} e^{-ax} \, dx$</td>
+                                <td class="convergent">$a > 0$</td>
+                            </tr>
+                            <tr>
+                                <td>Logarítmica</td>
+                                <td>$\int_2^{\infty} \frac{1}{x(\ln x)^p} \, dx$</td>
+                                <td class="convergent">$p > 1$</td>
+                            </tr>
+                            <tr>
+                                <td>Trigonométrica</td>
+                                <td>$\int_0^{\infty} \frac{\sin x}{x} \, dx$</td>
+                                <td class="convergent">Converge</td>
+                            </tr>
+                        </tbody>
+                    </div>
+                </div>
+            </div>
+
+            <div id="practica" class="section">
+                <div class="theory-content">
+                    <h2>Ejercicios de Práctica</h2>
+
+                    <div class="example-box">
+                        <h3>Ejercicio 1</h3>
+                        <p>Evalúa las siguientes integrales impropias:</p>
+                        <ol type="a">
+                            <li>$\int_0^{\infty} xe^{-x^2} \, dx$</li>
+                            <li>$\int_0^1 \frac{1}{\sqrt{1-x^2}} \, dx$</li>
+                            <li>$\int_{-\infty}^{\infty} \frac{1}{1+x^2} \, dx$</li>
+                            <li>$\int_1^{\infty} \frac{\ln x}{x^2} \, dx$</li>
+                        </ol>
+                    </div>
+
+                    <div class="example-box">
+                        <h3>Ejercicio 2</h3>
+                        <p>Determina la convergencia (sin calcular el valor) de:</p>
+                        <ol type="a">
+                            <li>$\int_1^{\infty} \frac{1}{\sqrt{x^3 + 1}} \, dx$</li>
+                            <li>$\int_0^1 \frac{\sin x}{\sqrt{x}} \, dx$</li>
+                            <li>$\int_1^{\infty} \frac{1}{x \ln x} \, dx$</li>
+                            <li>$\int_0^{\infty} \frac{1}{e^x + e^{-x}} \, dx$</li>
+                        </ol>
+                    </div>
+
+                    <div class="note-box">
+                        <h3>Estrategias para Resolver Integrales Impropias</h3>
+                        <ol>
+                            <li><strong>Identificar el tipo:</strong> Límites infinitos o discontinuidades</li>
+                            <li><strong>Aplicar la definición:</strong> Convertir a límites</li>
+                            <li><strong>Integrar:</strong> Usar técnicas de integración apropiadas</li>
+                            <li><strong>Evaluar límites:</strong> Aplicar L'Hôpital si es necesario</li>
+                            <li><strong>Para convergencia:</strong> Usar criterios de comparación</li>
+                        </ol>
+                    </div>
+
+                    <div class="theorem-box">
+                        <h3>Técnicas Útiles</h3>
+                        <ul>
+                            <li><strong>Sustitución:</strong> Especialmente útil para simplificar exponentes</li>
+                            <li><strong>Integración por partes:</strong> Para productos de funciones</li>
+                            <li><strong>Fracciones parciales:</strong> Para funciones racionales</li>
+                            <li><strong>Sustituciones trigonométricas:</strong> Para raíces cuadráticas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remover clase active de todos los botones
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).classList.add('active');
+
+            // Activar el botón correspondiente
+            event.target.classList.add('active');
+
+            // Re-renderizar MathJax para la nueva sección
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Asegurar que MathJax renderice correctamente al cargar
+        window.addEventListener('load', function() {
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        });
+    </script>
+</body>
+</html>
