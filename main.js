@@ -1021,6 +1021,9 @@ document.addEventListener('DOMContentLoaded', function() {
   fetch("exercises.json").then(r => r.json()).then(data => {
     exercisesByType = data;
     initializeApp();
+  }).catch(error => {
+    alert("Error al cargar los ejercicios. Inténtalo de nuevo más tarde.");
+    console.error("Error al cargar exercises.json:", error);
   });
 
 }); // ← FIN DEL DOMContentLoaded
