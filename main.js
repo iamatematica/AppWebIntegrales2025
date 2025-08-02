@@ -1046,12 +1046,20 @@ document.addEventListener('DOMContentLoaded', function() {
   // ========== FIN DE MEJORAS ==========
 
   // ========== INICIALIZAR APLICACIÓN ==========
-  fetch("exercises.json").then(r => r.json()).then(data => {
-    exercisesByType = data;
-    initializeApp();
-  }).catch(error => {
-    alert("Error al cargar los ejercicios. Inténtalo de nuevo más tarde.");
-    console.error("Error al cargar exercises.json:", error);
-  });
+  fetch("exercises.json")
+    .then(r => r.json())
+    .then(data => {
+      exercisesByType = data;
+      initializeApp();
+    })
+    .catch(error => {
+      console.error("Error al cargar exercises.json:", error);
+      // Inicializar la aplicación aunque falle la carga
+      initializeApp();
+      const banner = document.createElement("div");
+      banner.className = "load-error";
+      banner.textContent = "No se pudieron cargar los ejercicios";
+      document.body.prepend(banner);
+    });
 
 }); // ← FIN DEL DOMContentLoaded
