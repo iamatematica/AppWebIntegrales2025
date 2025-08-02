@@ -5,33 +5,39 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #1e3a8a 0%, #9333ea 100%);
   min-height: 100vh;
-  color: #333;
+  color: #1f2937;
+  padding: 20px;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 header {
   text-align: center;
   margin-bottom: 30px;
-  color: white;
+  color: var(--primary-color);
 }
 
 h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-weight: 600;
+  text-shadow: none;
 }
 
 .subtitle {
   font-size: 1.2rem;
-  opacity: 0.9;
+  color: #64748b;
 }
 
 .type-selection {
@@ -41,14 +47,16 @@ h1 {
   margin-bottom: 30px;
 }
 
+
 .type-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
   padding: 25px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  border: 3px solid transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(5px);
 }
 
 .type-card:hover {
@@ -57,12 +65,12 @@ h1 {
 }
 
 .type-card.selected {
-  border-color: #667eea;
+  border-color: var(--primary-color);
   background: linear-gradient(135deg, #f8f9ff 0%, #e8edff 100%);
 }
 
 .type-card h3 {
-  color: #667eea;
+  color: var(--primary-color);
   font-size: 1.5rem;
   margin-bottom: 15px;
   display: flex;
@@ -82,7 +90,7 @@ h1 {
   border-radius: 8px;
   font-family: 'Courier New', monospace;
   color: #495057;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--primary-color);
 }
 
 .exercise-section {
@@ -100,7 +108,7 @@ h1 {
 
 .exercise-title {
   font-size: 1.8rem;
-  color: #667eea;
+  color: var(--primary-color);
   margin-bottom: 10px;
 }
 
@@ -114,7 +122,7 @@ h1 {
 }
 
 .step-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
   padding: 15px 20px;
   border-radius: 10px 10px 0 0;
@@ -339,7 +347,7 @@ h1 {
 
 .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.4);
+  box-shadow: 0 12px 30px rgba(79, 70, 229, 0.4);
 }
 
 .btn:active {
@@ -425,7 +433,7 @@ h1 {
 }
 
 .results h2 {
-  color: #667eea;
+  color: var(--primary-color);
   font-size: 2rem;
   margin-bottom: 20px;
 }
@@ -550,11 +558,11 @@ h1 {
 .step-info {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #667eea;
+  color: var(--primary-color);
 }
 
 .btn-theory {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -569,7 +577,7 @@ h1 {
 
 .btn-theory:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
 }
 
 /* Modal de teoría */
@@ -640,7 +648,7 @@ h1 {
 }
 
 .theory-section h2 {
-  color: #667eea;
+  color: var(--primary-color);
   font-size: 1.8rem;
   margin-bottom: 15px;
   border-bottom: 2px solid #e1e8ff;
@@ -648,14 +656,14 @@ h1 {
 }
 
 .theory-section h3 {
-  color: #667eea;
+  color: var(--primary-color);
   font-size: 1.4rem;
   margin-bottom: 10px;
   margin-top: 20px;
 }
 
 .theory-section h4 {
-  color: #764ba2;
+  color: var(--primary-dark);
   font-size: 1.2rem;
   margin-bottom: 8px;
   margin-top: 15px;
@@ -679,14 +687,14 @@ h1 {
 
 .theory-example {
   background: linear-gradient(135deg, #f8f9ff 0%, #e8edff 100%);
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--primary-color);
   padding: 20px;
   margin: 20px 0;
   border-radius: 8px;
 }
 
 .theory-example h4 {
-  color: #667eea;
+  color: var(--primary-color);
   margin-bottom: 15px;
 }
 
