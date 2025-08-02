@@ -40,7 +40,8 @@
     <header>
       <h1>🧮 Resolución Guiada: Integrales Impropias</h1>
       <p class="subtitle">Aprende paso a paso con ejercicios interactivos</p>
-      <a href="teoria.html" class="btn btn-theory" style="text-decoration: none; display: inline-block;">📚 TEORÍA COMPLETA</a>
+      <a id="theory-btn" href="teoria.html" class="btn btn-theory" style="text-decoration: none; display: inline-block;">📚 TEORÍA COMPLETA</a>
+      <button id="theme-toggle" class="btn btn-secondary" aria-label="Alternar modo oscuro">🌙</button>
     </header>
 
     <main id="main-content">
@@ -142,6 +143,13 @@
       </div>
     </div>
   </div>
+    <div id="onboard-modal" class="badge-modal">
+      <div class="badge-content">
+        <h3>👋 Bienvenido</h3>
+        <p>Resuelve paso a paso y tu progreso se guardará automáticamente.</p>
+        <button id="onboard-close" class="btn">Comenzar</button>
+      </div>
+    </div>
 
   <script src="main.js"></script>
 </body>

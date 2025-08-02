@@ -846,3 +846,42 @@ a.btn:visited, a.nav-btn:visited {
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
 }
 
+/* Revisión de errores */
+.review {
+  margin-top: 2rem;
+  padding: 1rem;
+  background: #fef3c7;
+  border-radius: 8px;
+}
+
+.review-item {
+  margin-top: 0.5rem;
+}
+
+/* Dark mode */
+body.dark-mode {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+  color: #f9fafb;
+}
+
+body.dark-mode .container {
+  background: rgba(17, 24, 39, 0.85);
+  color: #f9fafb;
+}
+
+body.dark-mode .type-card,
+body.dark-mode .step-content,
+body.dark-mode .results,
+body.dark-mode .option {
+  background: #1f2937;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+body.dark-mode .option:hover {
+  background: #374151;
+}
+
+body.dark-mode .review {
+  background: #374151;
+}

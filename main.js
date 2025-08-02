@@ -45,6 +45,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const theoryModal = document.getElementById('theory-modal');
   const theoryClose = document.getElementById('theory-close');
   const theoryBody = document.getElementById('theory-body');
+  const themeToggle = document.getElementById("theme-toggle");
+  const onboardModal = document.getElementById("onboard-modal");
+  const onboardClose = document.getElementById("onboard-close");
 
   // ========== VARIABLES DE ESTADO ==========
   let currentType = null;
@@ -52,233 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentStep = 0;
   let score = 0;
   let selectedOption = null;
-  let username = '';
+  let wrongAnswers = [];
 
   // ========== DATOS DE EJERCICIOS ==========
-  const exercisesByType = {
-    primera: [
-      {
-        name: "$$\\int_3^\\infty \\frac{1}{x^4} dx$$",
-        description: "Integral impropia de primera especie con límite superior infinito",
-        steps: [
-          {
-            title: "Paso 1: Identificación del tipo de integral",
-            question: "¿Qué tipo de integral impropia es $\\int_3^\\infty \\frac{1}{x^4} dx$?",
-            options: [
-              { text: "Integral propia porque el integrando está definido", correct: false },
-              { text: "Integral impropia de primera especie por el límite superior infinito", correct: true },
-              { text: "Integral impropia de segunda especie por discontinuidad", correct: false }
-            ],
-            explanation: "Correcto: Es de primera especie porque tiene límite superior infinito ($\\infty$).",
-            hint: "Observa los límites de integración. ¿Alguno es infinito?"
-          },
-          {
-            title: "Paso 2: Definición como límite",
-            question: "¿Cómo se reescribe esta integral impropia como límite?",
-            options: [
-              { text: "$\\int_3^\\infty \\frac{1}{x^4} dx = \\lim_{b \\to 0^-} \\int_3^b \\frac{1}{x^4} dx$", correct: false },
-              { text: "$\\int_3^\\infty \\frac{1}{x^4} dx = \\lim_{b \\to \\infty} \\int_3^b \\frac{1}{x^4} dx$", correct: true },
-              { text: "$\\int_3^\\infty \\frac{1}{x^4} dx = \\lim_{a \\to -\\infty} \\int_a^3 \\frac{1}{x^4} dx$", correct: false }
-            ],
-            explanation: "Correcto: En integrales impropias con límite superior infinito, reemplazamos $\\infty$ por $b$ y tomamos $\\lim_{b \\to \\infty}$.",
-            hint: "El límite infinito se convierte en una variable que tiende a infinito."
-          },
-          {
-            title: "Paso 3: Cálculo de la antiderivada",
-            question: "¿Cuál es la antiderivada de $\\frac{1}{x^4}$?",
-            options: [
-              { text: "$\\int \\frac{1}{x^4} dx = -\\frac{1}{3x^3} + C$", correct: true },
-              { text: "$\\int \\frac{1}{x^4} dx = \\frac{1}{4x^4} + C$", correct: false },
-              { text: "$\\int \\frac{1}{x^4} dx = -\\frac{1}{4x^5} + C$", correct: false }
-            ],
-            explanation: "Correcto: $\\frac{1}{x^4} = x^{-4}$, entonces $\\int x^{-4} dx = \\frac{x^{-3}}{-3} = -\\frac{1}{3x^3} + C$",
-            hint: "Usa la regla de potencias: $\\int x^n dx = \\frac{x^{n+1}}{n+1} + C$ con $n = -4$."
-          },
-          {
-            title: "Paso 4: Evaluación de la integral definida",
-            question: "Al evaluar $\\int_3^b \\frac{1}{x^4} dx$ usando la antiderivada, obtenemos:",
-            options: [
-              { text: "$\\left[-\\frac{1}{3x^3}\\right]_3^b = -\\frac{1}{3b^3} + \\frac{1}{81}$", correct: true },
-              { text: "$\\left[-\\frac{1}{3x^3}\\right]_3^b = -\\frac{1}{3b^3} - \\frac{1}{81}$", correct: false },
-              { text: "$\\left[-\\frac{1}{3x^3}\\right]_3^b = \\frac{1}{3b^3} - \\frac{1}{81}$", correct: false }
-            ],
-            explanation: "Correcto: $\\left[-\\frac{1}{3x^3}\\right]_3^b = -\\frac{1}{3b^3} - \\left(-\\frac{1}{3(3)^3}\\right) = -\\frac{1}{3b^3} + \\frac{1}{81}$",
-            hint: "Aplica el teorema fundamental: $F(b) - F(3)$ donde $F(x) = -\\frac{1}{3x^3}$."
-          },
-          {
-            title: "Paso 5: Cálculo del límite",
-            question: "¿Cuál es el resultado de $\\lim_{b \\to \\infty} \\left(-\\frac{1}{3b^3} + \\frac{1}{81}\\right)$?",
-            options: [
-              { text: "$\\infty$ (la integral diverge)", correct: false },
-              { text: "$\\frac{1}{81}$", correct: true },
-              { text: "$0$", correct: false }
-            ],
-            explanation: "Correcto: $\\lim_{b \\to \\infty} \\left(-\\frac{1}{3b^3} + \\frac{1}{81}\\right) = 0 + \\frac{1}{81} = \\frac{1}{81}$",
-            hint: "¿Qué pasa con $\\frac{1}{3b^3}$ cuando $b \\to \\infty$?"
-          },
-          {
-            title: "Paso 6: Conclusión sobre convergencia",
-            question: "¿Qué podemos concluir sobre la integral $\\int_3^\\infty \\frac{1}{x^4} dx$?",
-            options: [
-              { text: "Converge a $\\frac{1}{81}$", correct: true },
-              { text: "Diverge a infinito", correct: false },
-              { text: "El límite no existe", correct: false }
-            ],
-            explanation: "Correcto: La integral converge porque el límite existe y es finito: $\\int_3^\\infty \\frac{1}{x^4} dx = \\frac{1}{81}$",
-            hint: "Una integral impropia converge si su límite existe y es finito."
-          }
-        ]
-      }
-    ],
-    segunda: [
-      {
-        name: "$$\\int_0^1 \\frac{1}{\\sqrt{x}} dx$$",
-        description: "Integral impropia de segunda especie - discontinuidad en x=0",
-        steps: [
-          {
-            title: "Paso 1: Identificación del problema",
-            question: "¿Por qué $\\int_0^1 \\frac{1}{\\sqrt{x}} dx$ es una integral impropia?",
-            options: [
-              { text: "Porque el límite superior es infinito", correct: false },
-              { text: "Porque $\\frac{1}{\\sqrt{x}}$ no está definida en $x=0$", correct: true },
-              { text: "Porque el integrando es negativo", correct: false }
-            ],
-            explanation: "Correcto: $\\frac{1}{\\sqrt{x}} = \\frac{1}{\\sqrt{0}}$ no está definida en $x=0$, creando una discontinuidad infinita.",
-            hint: "Evalúa $f(0) = \\frac{1}{\\sqrt{0}}$. ¿Está definida?"
-          },
-          {
-            title: "Paso 2: Clasificación del tipo",
-            question: "¿Qué tipo de integral impropia es esta?",
-            options: [
-              { text: "Primera especie (límites infinitos)", correct: false },
-              { text: "Segunda especie (discontinuidad en el integrando)", correct: true },
-              { text: "Tercera especie (ambas características)", correct: false }
-            ],
-            explanation: "Correcto: Es de segunda especie porque hay discontinuidad en $x=0$ (extremo del intervalo).",
-            hint: "Los límites son finitos, pero hay discontinuidad en el integrando."
-          },
-          {
-            title: "Paso 3: Reescritura como límite",
-            question: "¿Cómo se reescribe $\\int_0^1 \\frac{1}{\\sqrt{x}} dx$ como límite?",
-            options: [
-              { text: "$\\lim_{a \\to 0^+} \\int_a^1 \\frac{1}{\\sqrt{x}} dx$", correct: true },
-              { text: "$\\lim_{a \\to 0^-} \\int_a^1 \\frac{1}{\\sqrt{x}} dx$", correct: false },
-              { text: "$\\lim_{b \\to \\infty} \\int_0^b \\frac{1}{\\sqrt{x}} dx$", correct: false }
-            ],
-            explanation: "Correcto: Nos aproximamos a 0 desde la derecha ($0^+$) porque $\\sqrt{x}$ solo está definida para $x \\geq 0$.",
-            hint: "La discontinuidad está en $x=0$. ¿Desde qué lado nos aproximamos?"
-          },
-          {
-            title: "Paso 4: Cálculo de la antiderivada",
-            question: "¿Cuál es la antiderivada de $\\frac{1}{\\sqrt{x}}$?",
-            options: [
-              { text: "$\\int \\frac{1}{\\sqrt{x}} dx = 2\\sqrt{x} + C$", correct: true },
-              { text: "$\\int \\frac{1}{\\sqrt{x}} dx = \\sqrt{x} + C$", correct: false },
-              { text: "$\\int \\frac{1}{\\sqrt{x}} dx = -\\frac{2}{\\sqrt{x}} + C$", correct: false }
-            ],
-            explanation: "Correcto: $\\frac{1}{\\sqrt{x}} = x^{-1/2}$, entonces $\\int x^{-1/2} dx = \\frac{x^{1/2}}{1/2} = 2\\sqrt{x} + C$",
-            hint: "Reescribe $\\frac{1}{\\sqrt{x}}$ como $x^{-1/2}$ y usa la regla de potencias."
-          },
-          {
-            title: "Paso 5: Evaluación de la integral",
-            question: "Al evaluar $\\int_a^1 \\frac{1}{\\sqrt{x}} dx$, obtenemos:",
-            options: [
-              { text: "$[2\\sqrt{x}]_a^1 = 2\\sqrt{1} - 2\\sqrt{a} = 2 - 2\\sqrt{a}$", correct: true },
-              { text: "$[2\\sqrt{x}]_a^1 = 2\\sqrt{a} - 2\\sqrt{1} = 2\\sqrt{a} - 2$", correct: false },
-              { text: "$[2\\sqrt{x}]_a^1 = 2\\sqrt{1} + 2\\sqrt{a} = 2 + 2\\sqrt{a}$", correct: false }
-            ],
-            explanation: "Correcto: $[2\\sqrt{x}]_a^1 = 2\\sqrt{1} - 2\\sqrt{a} = 2 - 2\\sqrt{a}$",
-            hint: "Aplica el teorema fundamental: $F(1) - F(a)$ donde $F(x) = 2\\sqrt{x}$."
-          },
-          {
-            title: "Paso 6: Cálculo del límite y convergencia",
-            question: "¿Cuál es el resultado de $\\lim_{a \\to 0^+} (2 - 2\\sqrt{a})$?",
-            options: [
-              { text: "$2$ (la integral converge)", correct: true },
-              { text: "$\\infty$ (la integral diverge)", correct: false },
-              { text: "$0$", correct: false }
-            ],
-            explanation: "Correcto: $\\lim_{a \\to 0^+} (2 - 2\\sqrt{a}) = 2 - 2\\sqrt{0} = 2 - 0 = 2$. La integral converge a 2.",
-            hint: "¿Qué valor toma $\\sqrt{a}$ cuando $a$ se acerca a 0 por la derecha?"
-          }
-        ]
-      }
-    ],
-    tercera: [
-      {
-        name: "$$\\int_0^\\infty \\frac{1}{\\sqrt{x(x+1)}} dx$$",
-        description: "Integral impropia de tercera especie - discontinuidad en x=0 y límite infinito",
-        steps: [
-          {
-            title: "Paso 1: Análisis del integrando",
-            question: "¿Qué problemas presenta la integral $\\int_0^\\infty \\frac{1}{\\sqrt{x(x+1)}} dx$?",
-            options: [
-              { text: "Solo tiene límite superior infinito", correct: false },
-              { text: "Solo tiene discontinuidad en $x=0$", correct: false },
-              { text: "Tiene límite infinito Y discontinuidad en $x=0$", correct: true }
-            ],
-            explanation: "Correcto: Hay dos problemas: límite superior $\\infty$ y discontinuidad en $x=0$ donde $\\frac{1}{\\sqrt{0 \\cdot 1}} = \\frac{1}{0}$.",
-            hint: "Examina tanto los límites de integración como el comportamiento del integrando en $x=0$."
-          },
-          {
-            title: "Paso 2: Clasificación del tipo",
-            question: "¿Qué tipo de integral impropia es esta?",
-            options: [
-              { text: "Primera especie solamente", correct: false },
-              { text: "Segunda especie solamente", correct: false },
-              { text: "Tercera especie (primera + segunda)", correct: true }
-            ],
-            explanation: "Correcto: Es de tercera especie porque combina características de primera (límite $\\infty$) y segunda especie (discontinuidad en $x=0$).",
-            hint: "La tercera especie combina problemas de primera y segunda especie."
-          },
-          {
-            title: "Paso 3: División de la integral",
-            question: "¿Cómo se debe dividir esta integral para resolverla?",
-            options: [
-              { text: "$\\int_0^\\infty f(x)dx = \\int_0^1 f(x)dx + \\int_1^\\infty f(x)dx$", correct: true },
-              { text: "$\\int_0^\\infty f(x)dx = \\int_0^{1/2} f(x)dx + \\int_{1/2}^\\infty f(x)dx$", correct: false },
-              { text: "No es necesario dividirla", correct: false }
-            ],
-            explanation: "Correcto: Se divide en $x=1$ para separar la discontinuidad ($\\int_0^1$) del límite infinito ($\\int_1^\\infty$).",
-            hint: "Divide en un punto conveniente para tratar cada impropiedad por separado."
-          },
-          {
-            title: "Paso 4: Análisis de $\\int_0^1 \\frac{1}{\\sqrt{x(x+1)}} dx$",
-            question: "¿Qué tipo de impropiedad tiene $\\int_0^1 \\frac{1}{\\sqrt{x(x+1)}} dx$?",
-            options: [
-              { text: "Primera especie (límite infinito)", correct: false },
-              { text: "Segunda especie (discontinuidad en $x=0$)", correct: true },
-              { text: "Es una integral propia", correct: false }
-            ],
-            explanation: "Correcto: Es de segunda especie porque $\\frac{1}{\\sqrt{x(x+1)}}$ tiene discontinuidad en $x=0$.",
-            hint: "Los límites son finitos, pero el integrando no está definido en $x=0$."
-          },
-          {
-            title: "Paso 5: Análisis de $\\int_1^\\infty \\frac{1}{\\sqrt{x(x+1)}} dx$",
-            question: "¿Qué tipo de impropiedad tiene $\\int_1^\\infty \\frac{1}{\\sqrt{x(x+1)}} dx$?",
-            options: [
-              { text: "Primera especie (límite superior infinito)", correct: true },
-              { text: "Segunda especie (discontinuidad)", correct: false },
-              { text: "Es una integral propia", correct: false }
-            ],
-            explanation: "Correcto: Es de primera especie porque tiene límite superior infinito y el integrando es continuo en $[1,\\infty)$.",
-            hint: "No hay discontinuidades en $[1,\\infty)$, pero el límite superior es infinito."
-          },
-          {
-            title: "Paso 6: Criterio de convergencia",
-            question: "Para que $\\int_0^\\infty \\frac{1}{\\sqrt{x(x+1)}} dx$ converja, ¿qué debe ocurrir?",
-            options: [
-              { text: "Solo $\\int_0^1 f(x)dx$ debe converger", correct: false },
-              { text: "Solo $\\int_1^\\infty f(x)dx$ debe converger", correct: false },
-              { text: "Ambas integrales $\\int_0^1 f(x)dx$ e $\\int_1^\\infty f(x)dx$ deben converger", correct: true }
-            ],
-            explanation: "Correcto: Para que la integral de tercera especie converja, AMBAS partes deben converger independientemente.",
-            hint: "Si cualquiera de las dos partes diverge, toda la integral diverge."
-          }
-        ]
-      }
-    ]
-  };
+  let exercisesByType = {};
 
   // ========== CONTENIDO DE TEORÍA ==========
   const theoryContent = {
@@ -544,6 +324,24 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function initializeApp() {
     username = getUsername();
+
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark-mode");
+      themeToggle.textContent = "☀️";
+    } else {
+      themeToggle.textContent = "🌙";
+    }
+    themeToggle.addEventListener("click", toggleTheme);
+
+    if (!localStorage.getItem("hasSeenTutorial")) {
+      onboardModal.classList.add("show");
+    }
+    onboardClose.addEventListener("click", () => {
+      onboardModal.classList.remove("show");
+      localStorage.setItem("hasSeenTutorial", "true");
+    });
+
     // Event listeners para selección de tipos
     document.querySelectorAll('.type-card').forEach(card => {
       card.addEventListener('click', function() {
@@ -559,6 +357,16 @@ document.addEventListener('DOMContentLoaded', function() {
     nextBtn.addEventListener('click', nextStep);
     restartBtn.addEventListener('click', restartExercise);
     backToMenuBtn.addEventListener('click', backToMenu);
+    const saved = loadProgress();
+    if (saved && confirm("¿Reanudar tu último ejercicio?")) {
+      currentType = saved.currentType;
+      currentExercise = saved.currentExercise;
+      currentStep = saved.currentStep;
+      score = saved.score;
+      startExercise();
+      return;
+    }
+
     
     // Event listeners para modal de teoría
     theoryBtn.addEventListener('click', showTheoryModal);
@@ -596,6 +404,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function startExercise() {
+    wrongAnswers = [];
     const exercises = exercisesByType[currentType];
     const exercise = exercises[currentExercise];
     
@@ -718,10 +527,14 @@ document.addEventListener('DOMContentLoaded', function() {
       // Sonido de éxito
       playSound('correct');
     } else {
+      wrongAnswers.push({
+        title: step.title,
+        correct: step.options.find(o => o.correct).text,
+        explanation: step.explanation
+      });
       // Sonido de error
       playSound('incorrect');
     }
-
     // Habilitar siguiente paso
     nextBtn.disabled = false;
     checkBtn.disabled = true;
@@ -885,6 +698,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     return null;
   }
+
+  function toggleTheme() {
+    document.body.classList.toggle("dark-mode");
+    const isDark = document.body.classList.contains("dark-mode");
+    themeToggle.textContent = isDark ? "☀️" : "🌙";
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  }
+
 
   // Estadísticas
   function trackPerformance() {
@@ -1100,10 +921,24 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     
     resultsSection.appendChild(statsDiv);
+    if (wrongAnswers.length) {
+      const reviewDiv = document.createElement('div');
+      reviewDiv.className = 'review';
+      reviewDiv.innerHTML = '<h3>❌ Revisión de errores</h3>' +
+        wrongAnswers.map(w => `<div class="review-item"><strong>${w.title}</strong><br>Respuesta correcta: ${w.correct}<br>${w.explanation}</div>`).join('');
+      resultsSection.appendChild(reviewDiv);
+      setTimeout(() => {
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          MathJax.typesetPromise([reviewDiv]);
+        }
+      }, 100);
+    }
+
 
     updateRanking(percentage);
     displayRanking();
     checkBadges(stats, percentage);
+    wrongAnswers = [];
   }
 
   function restartExercise() {
@@ -1180,6 +1015,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // ========== FIN DE MEJORAS ==========
 
   // ========== INICIALIZAR APLICACIÓN ==========
-  initializeApp();
+  fetch("exercises.json").then(r => r.json()).then(data => {
+    exercisesByType = data;
+    initializeApp();
+  });
 
 }); // ← FIN DEL DOMContentLoaded
