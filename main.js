@@ -35,6 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Resultados
   const scoreEl = document.getElementById('score');
   const performanceMessage = document.getElementById('performance-message');
+  const rankingEl = document.getElementById('ranking');
+  const badgeModal = document.getElementById('badge-modal');
+  const badgeNameEl = document.getElementById('badge-name');
+  const badgeClose = document.getElementById('badge-close');
   
   // Modal de teoría
   const theoryBtn = document.getElementById('theory-btn');
@@ -48,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let currentStep = 0;
   let score = 0;
   let selectedOption = null;
+  let username = '';
 
   // ========== DATOS DE EJERCICIOS ==========
   const exercisesByType = {
@@ -538,6 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ========== FUNCIONES PRINCIPALES ==========
   
   function initializeApp() {
+    username = getUsername();
     // Event listeners para selección de tipos
     document.querySelectorAll('.type-card').forEach(card => {
       card.addEventListener('click', function() {
@@ -910,6 +916,66 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  function getUsername() {
+    let name = localStorage.getItem('username');
+    if (!name) {
+      name = prompt('Ingresa tu nombre:') || 'Anónimo';
+      localStorage.setItem('username', name);
+    }
+    return name;
+  }
+
+  const badgeRules = [
+    { id: 'first', name: 'Primer intento', condition: (stats) => stats.attempts === 1 },
+    { id: 'score80', name: '80% o más', condition: (_stats, s) => s >= 80 },
+    { id: 'expert', name: '5 intentos', condition: (stats) => stats.attempts >= 5 }
+  ];
+
+  function checkBadges(stats, percentage) {
+    try {
+      const unlocked = JSON.parse(localStorage.getItem('integralBadges') || '[]');
+      for (const b of badgeRules) {
+        if (!unlocked.includes(b.id) && b.condition(stats, percentage)) {
+          unlocked.push(b.id);
+          localStorage.setItem('integralBadges', JSON.stringify(unlocked));
+          showBadgeModal(b.name);
+        }
+      }
+    } catch (error) {
+      console.log('Error guardando badges');
+    }
+  }
+
+  function showBadgeModal(name) {
+    if (!badgeModal) return;
+    badgeNameEl.textContent = name;
+    badgeModal.classList.add('show');
+  }
+
+  badgeClose.addEventListener('click', () => badgeModal.classList.remove('show'));
+
+  function updateRanking(percent) {
+    try {
+      const ranking = JSON.parse(localStorage.getItem('integralRanking') || '[]');
+      ranking.push({ name: username, score: percent });
+      ranking.sort((a, b) => b.score - a.score);
+      localStorage.setItem('integralRanking', JSON.stringify(ranking.slice(0, 5)));
+    } catch (error) {
+      console.log('Error en ranking');
+    }
+  }
+
+  function displayRanking() {
+    if (!rankingEl) return;
+    const ranking = JSON.parse(localStorage.getItem('integralRanking') || '[]');
+    if (ranking.length === 0) {
+      rankingEl.innerHTML = '';
+      return;
+    }
+    rankingEl.innerHTML = '<h3>🏆 Ranking</h3><ol>' +
+      ranking.map(r => `<li>${r.name} - ${r.score}%</li>`).join('') + '</ol>';
+  }
+
   // Navegación con teclado
   document.addEventListener('keydown', function(e) {
     if (exerciseSection.style.display === 'block') {
@@ -1034,6 +1100,10 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     
     resultsSection.appendChild(statsDiv);
+
+    updateRanking(percentage);
+    displayRanking();
+    checkBadges(stats, percentage);
   }
 
   function restartExercise() {
