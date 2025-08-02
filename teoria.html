@@ -27,11 +27,19 @@
             --primary-dark: #3b82f6;
         }
 
+        html {
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            html { font-size: 12px; }
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #1e3a8a 0%, #9333ea 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
             line-height: 1.6;
         }
 
@@ -49,7 +57,7 @@
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
             text-align: center;
-            padding: 30px;
+            padding: 20px;
             position: relative;
             overflow: hidden;
         }
@@ -72,59 +80,26 @@
         }
 
         h1 {
-            font-size: 2.5em;
+            font-size: 1.8em;
             margin-bottom: 10px;
             position: relative;
             z-index: 1;
         }
 
         .subtitle {
-            font-size: 1.2em;
+            font-size: 1em;
             opacity: 0.9;
             position: relative;
             z-index: 1;
         }
 
         .content {
-            padding: 40px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .nav-btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            padding: 20px;
         }
 
         .section {
-            display: none;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .section.active {
             display: block;
+            animation: fadeIn 0.5s ease-in;
         }
 
         @keyframes fadeIn {
@@ -356,21 +331,11 @@
             .content {
                 padding: 20px;
             }
-            
-            .nav-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .nav-btn {
-                width: 80%;
-                margin: 5px 0;
-            }
-            
+
             .classification {
                 grid-template-columns: 1fr;
             }
-            
+
             h1 {
                 font-size: 2em;
             }
@@ -385,15 +350,8 @@
         </div>
         
         <div class="content">
-            <div class="nav-buttons">
-                <button class="nav-btn active" onclick="showSection('teoria')">Teoría</button>
-                <button class="nav-btn" onclick="showSection('ejemplos')">Ejemplos</button>
-                <button class="nav-btn" onclick="showSection('convergencia')">Convergencia</button>
-                <button class="nav-btn" onclick="showSection('practica')">Práctica</button>
-                <a href="index.html" class="nav-btn" style="text-decoration: none;">🎯 EJERCICIOS INTERACTIVOS</a>
-            </div>
-
-            <div id="teoria" class="section active">
+            <p style="text-align:center; margin-bottom:20px;"><a href="index.html">🎯 EJERCICIOS INTERACTIVOS</a></p>
+            <div id="teoria" class="section">
                 <div class="theory-content">
                     <h2>Integrales Impropias</h2>
                     
@@ -753,32 +711,6 @@
     </div>
 
     <script>
-        function showSection(sectionId) {
-            // Ocultar todas las secciones
-            const sections = document.querySelectorAll('.section');
-            sections.forEach(section => {
-                section.classList.remove('active');
-            });
-
-            // Remover clase active de todos los botones
-            const buttons = document.querySelectorAll('.nav-btn');
-            buttons.forEach(button => {
-                button.classList.remove('active');
-            });
-
-            // Mostrar la sección seleccionada
-            document.getElementById(sectionId).classList.add('active');
-
-            // Activar el botón correspondiente
-            event.target.classList.add('active');
-
-            // Re-renderizar MathJax para la nueva sección
-            if (window.MathJax) {
-                MathJax.typesetPromise();
-            }
-        }
-
-        // Asegurar que MathJax renderice correctamente al cargar
         window.addEventListener('load', function() {
             if (window.MathJax) {
                 MathJax.typesetPromise();
