@@ -793,8 +793,22 @@ document.addEventListener('DOMContentLoaded', function() {
       rankingEl.innerHTML = '';
       return;
     }
-    rankingEl.innerHTML = '<h3>🏆 Ranking</h3><ol>' +
-      ranking.map(r => `<li>${r.name} - ${r.score}%</li>`).join('') + '</ol>';
+    rankingEl.innerHTML = '';
+    const title = document.createElement('h3');
+    title.textContent = '🏆 Ranking';
+    const list = document.createElement('ol');
+    ranking.forEach(r => {
+      const item = document.createElement('li');
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = r.name;
+      const scoreSpan = document.createElement('span');
+      scoreSpan.textContent = ` - ${r.score}%`;
+      item.appendChild(nameSpan);
+      item.appendChild(scoreSpan);
+      list.appendChild(item);
+    });
+    rankingEl.appendChild(title);
+    rankingEl.appendChild(list);
   }
 
   // Navegación con teclado
