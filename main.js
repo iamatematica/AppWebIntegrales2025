@@ -960,7 +960,10 @@ document.addEventListener('DOMContentLoaded', function() {
     currentType = null;
   }
 
-  function showTheoryModal() {
+  function showTheoryModal(event) {
+    if (event) {
+      event.preventDefault();
+    }
     if (!currentType) {
       theoryBody.innerHTML = `
         <div class="theory-section">
