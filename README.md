@@ -14,3 +14,15 @@ Pequeña aplicación educativa con ejercicios interactivos de integrales impropi
 - Onboarding inicial para nuevos usuarios.
 - Base de ejercicios externalizada en `exercises.json`.
 
+## Pruebas manuales
+
+- **Tipo inexistente**
+  1. Abrir la consola del navegador.
+  2. Ejecutar `currentType = 'inexistente'; startExercise();`.
+  3. Verificar que se muestre el mensaje: "No hay ejercicios disponibles para este tipo.".
+
+- **Tipo sin ejercicios**
+  1. Abrir la consola del navegador.
+  2. Ejecutar `exercisesByType['vacio'] = []; currentType = 'vacio'; startExercise();`.
+  3. Verificar que se muestre el mensaje: "No hay ejercicios disponibles para este tipo.".
+
