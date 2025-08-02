@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let score = 0;
   let selectedOption = null;
   let wrongAnswers = [];
+  let username = '';
 
   // ========== DATOS DE EJERCICIOS ==========
   let exercisesByType = {};
