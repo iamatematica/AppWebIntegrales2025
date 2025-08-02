@@ -406,20 +406,33 @@ document.addEventListener('DOMContentLoaded', function() {
   function startExercise() {
     wrongAnswers = [];
     const exercises = exercisesByType[currentType];
+
+    // Validar que existan ejercicios para el tipo actual
+    if (!exercises || exercises.length === 0) {
+      alert('No hay ejercicios disponibles para este tipo.');
+      return;
+    }
+
     const exercise = exercises[currentExercise];
-    
+
+    // Verificar que el ejercicio seleccionado exista
+    if (!exercise) {
+      alert('No se encontró el ejercicio seleccionado.');
+      return;
+    }
+
     // Ocultar selección, mostrar ejercicio
     typeSelection.style.display = 'none';
     exerciseSection.style.display = 'block';
     resultsSection.style.display = 'none';
-    
+
     // Configurar header del ejercicio
     exerciseTitle.innerHTML = exercise.name;
     exerciseDescription.textContent = exercise.description;
-    
+
     // Mostrar primer paso
     showStep();
-    
+
     // Renderizar MathJax en el título
     setTimeout(() => {
       if (window.MathJax && window.MathJax.typesetPromise) {
